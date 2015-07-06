@@ -1,0 +1,25 @@
+{
+  "name": "queue-commander",
+  "version": "0.0.1",
+  "description": "Convenient interface for amqp lib",
+  "main": "index.js",
+  "dependencies": {
+    "amqplib": "=0.3.2",
+    "when": "3.7.3",
+    "uuid": "2.0.1"
+  },
+  "devDependencies": {
+    "jshint": "2.8.0",
+    "should": "7.0.1",
+    "mocha": "2.2.5",
+    "semicov": "0.1.1-2"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "amqp"
+  ],
+  "author": "Anatoliy Chakkaev",
+  "license": "MIT"
+}
