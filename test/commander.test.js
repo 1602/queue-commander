@@ -8,7 +8,7 @@ var when = require('when');
 describe('commander', function() {
 
     it('should register queue with name and settings', function(){
-        var qc = new QC();
+        var qc = new QC({prefix: 'test_'});
         qc.registerQueue('test-queue');
         qc.registerQueue('another-test-queue', {durable: true});
         qc.queues.should.have.lengthOf(2);
@@ -19,7 +19,7 @@ describe('commander', function() {
     });
 
     it('should not allow creating channel without registering a queue', function() {
-        var qc = new QC();
+        var qc = new QC({prefix: 'test_'});
         (function() {
             qc.channel({
                 name: 'TEST',
@@ -53,19 +53,20 @@ describe('commander', function() {
     });
 
     it('should load queue stats', function(done) {
-        var qc = new QC();
+        var qc = new QC({prefix: 'test_'});
         qc.registerQueue('durga');
         qc.loadQueueStats('messages').then(function(res) {
+            console.log(res);
             should.exist(res);
             res.should.have.lengthOf(1);
-            res[0].name.should.equal('durga');
+            res[0].name.should.equal('test_durga');
             res[0].messages.should.equal(0);
             done();
         }, done);
     });
 
     it.skip('should load given queues sizes', function(done) {
-        var qc = new QC();
+        var qc = new QC({prefix: 'test_'});
         qc.registerQueue('x');
         qc.registerQueue('durga', {durable: false});
         var ch1 = qc.channel({name: 'test', input: 'durga', output: 'x'});

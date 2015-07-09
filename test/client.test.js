@@ -8,7 +8,7 @@ var should = require('./'),
 describe('Client', function() {
 
     it('should connect on demand and use connection pooling', function(done) {
-        var qc = new QC();
+        var qc = new QC({prefix: 'test_'});
         qc.registerQueue('durga', {durable: false});
         var channel = qc.channel({name: 'ECHO', input: 'durga'});
         channel.onServer(function(sound, done) {
@@ -36,8 +36,8 @@ describe('Client', function() {
     });
 
     it('should be able to pick up job result posted by other worker', function(done) {
-        var qc1 = new QC();
-        var qc2 = new QC();
+        var qc1 = new QC({prefix: 'test_'});
+        var qc2 = new QC({prefix: 'test_'});
         qc1.registerQueue('durga', {durable: false});
         qc2.registerQueue('durga', {durable: false});
         var ch1 = qc1.channel({name: 'crawlProduct', input: 'durga'});

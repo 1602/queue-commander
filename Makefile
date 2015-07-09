@@ -1,7 +1,7 @@
 # TESTS
 
 TESTER = ./node_modules/.bin/mocha
-OPTS = --growl --ignore-leaks --timeout 15000
+OPTS = --growl --ignore-leaks --timeout 2000
 TESTS = test/*.test.js
 JSHINT = ./node_modules/.bin/jshint
 
