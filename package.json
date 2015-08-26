@@ -5,9 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "amqplib": "=0.3.2",
-    "when": "3.7.3",
+    "debug": "^2.2.0",
+    "request": "^2.58.0",
     "uuid": "2.0.1",
-    "request": "^2.58.0"
+    "when": "3.7.3"
   },
   "devDependencies": {
     "jshint": "2.8.0",
