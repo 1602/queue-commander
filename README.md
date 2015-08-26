@@ -11,7 +11,14 @@ npm install queue-commander
 
 ```javascript
 var QueueCommander = require('queue-commander');
-var qc = new QueueCommander();
+var qc = new QueueCommander(settings());
+
+function settings() {
+    return {
+        consumeJobResults: false, // default: true
+        prefix: 'staging_', // prepend queue with prefix
+    };
+}
 ```
 
 1. declare queue (queue-schema.js)
