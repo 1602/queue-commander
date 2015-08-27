@@ -52,17 +52,67 @@ describe('commander', function() {
         }).should.not.throw();
     });
 
-    it('should load queue stats', function(done) {
+    it('should load queue stats', function() {
         var qc = new QC({prefix: 'test_'});
         qc.registerQueue('durga');
-        qc.loadQueueStats('messages').then(function(res) {
+        qc.registerQueue('output');
+        return qc.loadQueueStats('messages').then(function(res) {
             console.log(res);
             should.exist(res);
-            res.should.have.lengthOf(1);
+            res.should.have.lengthOf(2);
             res[0].name.should.equal('test_durga');
             res[0].messages.should.equal(0);
-            done();
-        }, done);
+            res[1].name.should.equal('test_output');
+            res[1].messages.should.equal(0);
+        });
+    });
+
+    it('should not allow consuming jobs when consumeJobResults=false', function(done) {
+        var called1 = 0;
+        var called2 = 0;
+
+        var connect = schema({prefix: 'test_'}, true);
+        var ch1 = schema({prefix: 'test_', consumeJobResults: false});
+        var ch2 = schema({prefix: 'test_', consumeJobResults: true});
+
+        function schema(settings, isServer) {
+            var qc = new QC(settings);
+            qc.registerQueue('durga', {durable: false, noAck: true});
+            qc.registerQueue('output', {durable: false, noAck: true});
+            var ch = qc.channel({
+                name: 'TEST',
+                input: 'durga',
+                output: 'output'
+            });
+            if (isServer) {
+                ch.onServer(function(args, done) {
+                    done();
+                });
+                return qc.getServer().connect();
+            } else {
+                return ch;
+            }
+        }
+
+        var task1 = ch1.onClient(function fastHook(err, res, next) {
+            called1 += 1;
+            console.log('called 1');
+            next();
+        });
+        var task2 = ch2.onClient(function slowHook(err, res, next) {
+            setTimeout(function() {
+                called2 += 1;
+                next();
+                if (called2 === 2) {
+                    called1.should.equal(0);
+                    done();
+                }
+            }, 100);
+        });
+        connect.then(function() {
+            task1();
+            task2();
+        });
     });
 
     it.skip('should load given queues sizes', function(done) {
