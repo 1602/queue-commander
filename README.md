@@ -37,8 +37,11 @@ qc.registerQueue('fruits', {durable: false}); // configure queue here
 3. on server (server.js)
 
   ```javascript
-  apple.onServer(function(args, done) {
-      done(null, 'yummy ' + args.name);
+  apple.onServer(function(args, done, ack) {
+      ack(true);
+      setTimeout(function() {
+        done(null, 'yummy ' + args.name);
+      }, 1000);
   });
   ```
 
