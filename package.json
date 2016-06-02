@@ -1,6 +1,6 @@
 {
   "name": "queue-commander",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Convenient interface for amqp lib",
   "main": "index.js",
   "dependencies": {
